@@ -30,12 +30,27 @@ class Dropout2d(object):
 
         #zerp out entir channel
 
-        retain_prob = 1 - self.p
         if train:
-            sample = np.random.binomial(1, retain_prob, x.shape)
+            batch_size, in_channel, input_width, input_height = x.shape
 
-            x *= sample
-            x /= retain_prob
+            mask = []
+            for b in range(batch_size):
+                c = []
+                sample = np.random.binomial(1, self.p, x.shape[1])
+                for i in sample:
+                    if i == 0:
+                        arr = np.ones((x.shape[2], x.shape[3]))
+                        c.append(arr)
+                    elif i == 1:
+                        arr = np.zeros((x.shape[2], x.shape[3]))
+                        c.append(arr)
+
+                c = np.reshape(c, (x.shape[1], x.shape[2], x.shape[3]))
+                mask.append(c)
+
+            self.mask = np.reshape(mask, (x.shape))
+            x *= mask
+            x /= (1-self.p)
         return x
 
 
@@ -48,6 +63,8 @@ class Dropout2d(object):
         """
         # 1) This method is only called during training.
 
+        delta *= self.mask
+        delta /= (1-self.p)
 
-        return  delta * self.mask
+        return  delta
 
