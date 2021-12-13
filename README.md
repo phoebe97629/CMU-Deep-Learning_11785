@@ -12,5 +12,7 @@
 
 
 ### HW 3 RNN with numpy
-### project 3
+### Project 3
 
+### HW4
+#### Project4
