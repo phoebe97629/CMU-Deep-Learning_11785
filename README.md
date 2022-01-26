@@ -1,4 +1,4 @@
-# CMU-Deep-Learning
+# CMU-Deep-Learning Course Homework and Projects.
 ### HW 1 MLP with numpy
 ### Project 1
 
